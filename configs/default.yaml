@@ -1,0 +1,86 @@
+# Pipeline version is part of the idempotency key. Bump when
+# detection, tracking, or anonymization behavior changes.
+pipeline_version: "1.2.0"
+
+# auto = CUDA if onnxruntime-gpu sees a GPU, else CPU. Only the ONNX models
+# (RetinaFace QC, optional SCRFD) use it; YuNet runs in OpenCV on CPU.
+device: auto
+
+detector:
+  # yunet | scrfd | auto (auto = SCRFD on GPU, YuNet on CPU).
+  # Full-video ablation: YuNet 640 AP 0.947 vs SCRFD-10G 640 AP 0.939, and
+  # YuNet+ByteTrack recall 0.990 vs SCRFD+ByteTrack 0.981, so YuNet stays.
+  name: yunet
+  # Low on purpose: ByteTrack's second stage needs the 0.18–0.28 boxes.
+  # New tracks still need tracker.high_thresh.
+  score_threshold: 0.18
+  nms_threshold: 0.40
+  # Always scale the long side to this: 360p is upsampled, 4K is shrunk.
+  input_long_side: 640
+  extra_long_side: 960
+  extra_every: 0
+  strong_every: 0
+  min_face_px: 6
+
+preprocess:
+  # CLAHE only when the frame is actually dark. Night body-cam gains
+  # recall; daylight frames skip the extra copy.
+  clahe_when_mean_below: 72
+  clahe_clip: 2.0
+  clahe_grid: 8
+
+tracker:
+  # iou | bytetrack. Stock ByteTrack (high 0.5) dropped tiny faces that
+  # never score 0.5; starting tracks at 0.28 gave the best recall.
+  name: bytetrack
+  high_thresh: 0.28
+  low_thresh: 0.18
+  # Loose IoU: body-cam pans hard and boxes jump.
+  iou_match: 0.22
+  center_match_frac: 0.35
+  # Keep painting the last box after a miss so a 4-8 frame occlusion
+  # or detector blink does not leak identity.
+  max_age: 14
+  min_hits: 1
+  smooth: 0.55
+
+anonymize:
+  method: hybrid
+  pad: 0.42
+  pixel_blocks: 10
+  shape: ellipse
+
+adaptive:
+  # After this many faceless frames, detect every Nth frame and coast.
+  empty_streak_before_skip: 36
+  empty_detect_every: 4
+
+video:
+  keep_audio: true
+  # nvenc is used automatically when ffmpeg reports h264_nvenc.
+  encoder: auto
+  crf: 20
+  preset: p1
+
+qc:
+  enabled: true
+  score_threshold: 0.50
+  nms_threshold: 0.40
+  input_long_side: 640
+  # GPU QC: RetinaFace ~4 ms/frame, so check every 6th frame at 30 FPS.
+  sample_interval_sec: 0.2
+  max_frames: 20000
+  # CPU QC: ~160 ms/frame, so fall back to a sparse budget.
+  cpu_sample_interval_sec: 1.5
+  cpu_max_frames: 120
+  oversample_track_loss: true
+  fail_fast: false
+  retry_on_fail: false
+  retry_score_threshold: 0.22
+  retry_input_long_side: 960
+  retry_detect_every: 1
+  retry_strong_every: 0
+
+jobs:
+  db_path: outputs/jobs.sqlite
+  lock_dir: outputs/locks

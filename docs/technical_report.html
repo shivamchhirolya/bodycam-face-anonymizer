@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Body-Camera Face Anonymizer | Assignment Report | Shivam</title>
+<style>
+  @font-face { font-family: "Source Serif 4"; src: url("fonts/SourceSerif4-Regular.ttf"); font-weight: 400; font-style: normal; }
+  @font-face { font-family: "Source Serif 4"; src: url("fonts/SourceSerif4-Italic.ttf"); font-weight: 400; font-style: italic; }
+  @font-face { font-family: "Source Serif 4"; src: url("fonts/SourceSerif4-Semibold.ttf"); font-weight: 600; font-style: normal; }
+  @font-face { font-family: "Source Serif 4"; src: url("fonts/SourceSerif4-Bold.ttf"); font-weight: 700; font-style: normal; }
+  @font-face { font-family: "Outfit"; src: url("fonts/Outfit-Regular.ttf"); font-weight: 400; font-style: normal; }
+  @font-face { font-family: "Outfit"; src: url("fonts/Outfit-Medium.ttf"); font-weight: 500; font-style: normal; }
+  @font-face { font-family: "Outfit"; src: url("fonts/Outfit-SemiBold.ttf"); font-weight: 600; font-style: normal; }
+  @font-face { font-family: "Outfit"; src: url("fonts/Outfit-Bold.ttf"); font-weight: 700; font-style: normal; }
+
+  @page {
+    size: A4;
+    margin: 14mm 14mm 16mm 14mm;
+    @bottom-center {
+      content: "Assignment report  ·  Page " counter(page);
+      font-family: "Outfit", sans-serif;
+      font-size: 8pt;
+      color: #888;
+    }
+  }
+  @page :first {
+    margin: 0;
+    background: #1a2744;
+    @bottom-center { content: none; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Source Serif 4", "Liberation Serif", serif;
+    color: #1c1c1c;
+    line-height: 1.55;
+    font-size: 10pt;
+    hyphens: none;
+    -weasy-hyphens: none;
+  }
+  .three, .toc, .arrowflow, .cap, .nw, th, td { hyphens: none; }
+  .cover {
+    height: 297mm;
+    padding: 0;
+    background: #1a2744;
+    color: #fff;
+    page-break-after: always;
+    break-after: page;
+  }
+  .cover-shell { width: 100%; height: 297mm; border-collapse: collapse; }
+  .cover-shell td { border: 0; }
+  .cover-shell td.cover-top {
+    vertical-align: top;
+    padding: 42mm 22mm 12mm 22mm;
+    height: 248mm;
+  }
+  .cover-shell td.cover-foot {
+    vertical-align: bottom;
+    padding: 0 22mm 16mm 22mm;
+    height: 49mm;
+    font-size: 8.5pt;
+    color: rgba(255,255,255,0.7);
+    font-family: "Outfit", sans-serif;
+  }
+  .cover-bar { height: 4px; background: #e8c547; width: 72px; margin-bottom: 16px; }
+  .cover .badge {
+    display: inline-block;
+    font-family: "Outfit", sans-serif;
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 5px 10px;
+    margin-bottom: 18px;
+  }
+  .cover h1 {
+    font-size: 26pt;
+    line-height: 1.18;
+    margin: 0 0 18px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .cover h1 span {
+    display: block;
+    font-size: 15pt;
+    font-weight: 600;
+    margin-top: 8px;
+    color: #e8c547;
+    line-height: 1.3;
+  }
+  .cover p.lead {
+    font-size: 11pt;
+    color: rgba(255,255,255,0.88);
+    max-width: 54ch;
+    margin: 0 0 18px;
+  }
+  .cover-kpi { width: 100%; max-width: 170mm; border-collapse: separate; border-spacing: 10px 0; margin: 4px 0 0; }
+  .cover-kpi td {
+    width: 33.3%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(232,197,71,0.42);
+    padding: 11px 12px 10px;
+    vertical-align: top;
+    font-family: "Outfit", sans-serif;
+    font-size: 8.2pt;
+    color: rgba(255,255,255,0.78);
+    line-height: 1.35;
+  }
+  .cover-kpi b {
+    display: block;
+    font-size: 15pt;
+    color: #e8c547;
+    margin-bottom: 5px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .cover-note {
+    font-family: "Outfit", sans-serif;
+    font-size: 8pt;
+    color: rgba(255,255,255,0.55);
+    margin: 12px 0 0;
+  }
+  .cover-foot div { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 12px; }
+  .cover-brand { display: block; margin-top: 10px; font-size: 8pt; color: #c8c8c8; letter-spacing: 0.02em; }
+
+  .contents { break-after: page; page-break-after: always; }
+  .contents-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  .contents-table td { border-bottom: 1px solid #ddd6cb; padding: 11px 4px 10px; vertical-align: top; }
+  .contents-table td.c-t a {
+    display: block;
+    font-family: "Source Serif 4", serif;
+    font-size: 12.5pt;
+    font-weight: 600;
+    color: #0b4f8a;
+    text-decoration: none;
+  }
+  .contents-table td.c-t span {
+    display: block;
+    font-family: "Outfit", sans-serif;
+    font-size: 9.2pt;
+    color: #5f5a52;
+    margin-top: 2px;
+  }
+  .contents-table td.c-p { width: 18mm; text-align: right; font-family: "Outfit", sans-serif; font-size: 11pt; font-weight: 600; }
+  .contents-table td.c-p a { color: #1a2744; text-decoration: none; }
+  .contents-table td.c-p a::after { content: target-counter(attr(href), page); }
+
+  h2, h3, .cover h1 { font-family: "Source Serif 4", "Liberation Serif", serif; }
+  .cover .badge, .cover-foot, .toc, .two, .three, .steps, .arrowflow,
+  .note, .callout, .shots .cap, .contents-table { font-family: "Outfit", sans-serif; }
+
+  h2 {
+    margin: 0 0 10px;
+    font-size: 14pt;
+    font-weight: 600;
+    color: #0b4f8a;
+    border-bottom: 2px solid #e8c547;
+    padding-bottom: 6px;
+    page-break-after: avoid;
+  }
+  h3 {
+    margin: 14px 0 6px;
+    font-size: 11.5pt;
+    font-weight: 600;
+    color: #0b4f8a;
+    page-break-after: avoid;
+  }
+  p { margin: 0 0 10px; }
+  ul, ol { margin: 6px 0 14px; padding-left: 1.2rem; }
+  li { margin: 5px 0; line-height: 1.45; }
+  .note { font-size: 8.5pt; color: #5f5a52; margin: 0 0 10px; }
+  code, .m { font-family: "DejaVu Sans Mono", monospace; font-size: 8.5pt; }
+  pre {
+    background: #1a2744;
+    color: #f4efe6;
+    padding: 10px 12px;
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 8pt;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    margin: 6px 0 12px;
+    page-break-inside: avoid;
+  }
+  .keep, .toc, .two, .three, .steps, .callout, .arrowflow, .flow {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .shots { page-break-inside: avoid; break-inside: avoid; }
+  .shots.fill { page-break-inside: auto; break-inside: auto; }
+  .part { page-break-before: always; break-before: page; }
+
+  .toc { width: 100%; border-collapse: collapse; margin: 12px 0 4px; font-size: 9.5pt; }
+  .toc th, .toc td { text-align: left; padding: 8px 10px; border: 1px solid #ddd6cb; vertical-align: top; }
+  .toc th { background: #1a2744; color: #fff; font-size: 9pt; font-weight: 700; width: 34%; }
+  .toc td { background: rgba(250,248,244,0.72); }
+
+  .two { width: 100%; border-collapse: separate; border-spacing: 8px 0; margin: 10px 0 12px; }
+  .two td { width: 50%; vertical-align: top; padding: 10px 12px; border: 1px solid #ddd6cb; font-size: 9.5pt; }
+  .two .part1 { background: rgba(232,241,250,0.78); border-left: 4px solid #0b4f8a; }
+  .two .part2 { background: rgba(255,248,230,0.78); border-left: 4px solid #9a6700; }
+  .two .desk { background: rgba(230,244,237,0.78); border-left: 4px solid #1a6b4a; }
+  .two .phone { background: rgba(253,236,234,0.78); border-left: 4px solid #b42318; }
+  .two b { display: block; margin-bottom: 4px; font-size: 10pt; }
+
+  .three { width: 100%; border-collapse: collapse; font-size: 8.4pt; margin: 8px 0 12px; }
+  .three th, .three td { text-align: left; padding: 5px 6px; border-bottom: 1px solid #ddd6cb; vertical-align: top; }
+  .three th { background: #1a2744; color: #fff; font-size: 7.5pt; font-weight: 700; }
+  .three tr:nth-child(even) td { background: rgba(250,248,244,0.72); }
+
+  .callout { background: rgba(245,245,245,0.72); border-left: 4px solid #0b4f8a; padding: 8px 10px; font-size: 9.5pt; margin: 10px 0 12px; }
+  .callout.warn { border-left-color: #b42318; background: rgba(253,236,234,0.78); }
+  .callout.ok { border-left-color: #1a6b4a; background: rgba(230,244,237,0.78); }
+
+  .steps { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+  .steps td { width: 25%; background: rgba(255,248,230,0.78); border: 1px solid #e8d9a8; padding: 9px 10px; font-size: 9pt; }
+  .steps b { display: block; margin-bottom: 4px; color: #1a2744; }
+
+  .flow { width: 100%; border-collapse: separate; border-spacing: 0 10px; margin: 4px 0 14px; }
+  .flow td.lab {
+    width: 28mm;
+    font-family: "Outfit", sans-serif;
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #0b4f8a;
+    vertical-align: middle;
+    padding-right: 8px;
+  }
+  .arrowflow {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+  }
+  .arrowflow td.box {
+    width: 22%;
+    background: #1a2744;
+    color: #fff;
+    padding: 10px 8px 10px 10px;
+    font-size: 8pt;
+    line-height: 1.35;
+    vertical-align: top;
+  }
+  .arrowflow td.box b {
+    display: block;
+    color: #e8c547;
+    font-size: 8.6pt;
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .arrowflow td.arr {
+    width: 4%;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+  }
+  .arrowflow td.arr span {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 11px solid #e8c547;
+  }
+  .shots { width: 100%; border-collapse: separate; border-spacing: 8px 6px; margin: 6px 0 8px; }
+  .shots td { width: 50%; vertical-align: top; padding: 0; border: 1px solid #ddd6cb; }
+  .shots img { display: block; width: 100%; height: auto; }
+  .shots.full td { width: 100%; }
+  .shots .cap { padding: 5px 7px; font-size: 7.5pt; color: #5f5a52; background: rgba(250,248,244,0.72); line-height: 1.3; }
+  .arch-wrap { margin: 4px 0 8px; border: 1px solid #ddd6cb; background: #f7f5ef; page-break-inside: avoid; break-inside: avoid; }
+  .arch-wrap img { display: block; width: 100%; height: auto; }
+  .cite { font-size: 9.5pt; }
+  .cite a { color: #0b4f8a; word-break: break-all; }
+  .next td b { color: #0b4f8a; }
+  .prob {
+    background: rgba(232,241,250,0.78);
+    border-left: 4px solid #0b4f8a;
+    padding: 10px 12px;
+    margin: 8px 0 12px;
+    font-size: 10pt;
+  }
+  .nw { white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <table class="cover-shell">
+    <tr>
+      <td class="cover-top">
+        <div class="cover-bar"></div>
+        <div class="badge">Technical assignment report</div>
+        <h1>
+          Body-camera face anonymization
+          <span>Detect, anonymize, and independently audit visible faces</span>
+        </h1>
+        <p class="lead">
+          A working Python system for Pronto. It redacts faces it can find in body-cam video, audits the finished file with a second model, and does not encode the same upload twice.
+        </p>
+        <table class="cover-kpi">
+          <tr>
+            <td><b>41.5 FPS</b>YuNet + ByteTrack with privacy-oriented thresholds. 1.38× real time on the 5-minute hall clip.</td>
+            <td><b>0.990</b>Proxy tracked recall on 3,690 RetinaFace-derived faces from the long cut of the same hall.</td>
+            <td><b>37 / 3,690</b>Proxy misses. Concentrated in far 8–12 px heads. Output is review-gated, not auto-published.</td>
+          </tr>
+        </table>
+        <p class="cover-note">Proxy evaluation. Not human-annotated ground truth. Spot-checked stills are in section 6.</p>
+      </td>
+    </tr>
+    <tr>
+      <td class="cover-foot">
+        <div>
+          Prepared for Pronto &nbsp;·&nbsp; 4 October 2026
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="contents">
+  <h2>Contents</h2>
+  <table class="contents-table">
+    <tr>
+      <td class="c-t"><a href="#s1">1. The Brief</a><span>What I was asked to build</span></td>
+      <td class="c-p"><a href="#s1"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s2">2. What I Built</a><span>The working system in one page</span></td>
+      <td class="c-p"><a href="#s2"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s3">3. Architecture</a><span>Jobs, live path, audit, and design principles</span></td>
+      <td class="c-p"><a href="#s3"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s4">4. How It Works</a><span>Detect, track, blur, check</span></td>
+      <td class="c-p"><a href="#s4"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s5">5. Problems I Hit, and How I Fixed Them</a><span>The bugs that changed the design</span></td>
+      <td class="c-p"><a href="#s5"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s6">6. Evaluation and Results</a><span>Methodology, metrics, stills, one failure</span></td>
+      <td class="c-p"><a href="#s6"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s7">7. Ablation</a><span><span class="nw">YuNet</span> vs SCRFD, trackers, tiles, GPU</span></td>
+      <td class="c-p"><a href="#s7"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s8">8. How to Read the Code</a><span>The files that matter</span></td>
+      <td class="c-p"><a href="#s8"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s9">9. What Is Still Weak</a><span>Limits I would fix next</span></td>
+      <td class="c-p"><a href="#s9"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s10">10. Next Steps</a><span>Privacy first, then quality, then speed</span></td>
+      <td class="c-p"><a href="#s10"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s11">11. How to Run It</a><span>Commands for process, jobs, tests</span></td>
+      <td class="c-p"><a href="#s11"></a></td>
+    </tr>
+    <tr>
+      <td class="c-t"><a href="#s12">12. Sources</a><span>The two evaluation clips</span></td>
+      <td class="c-p"><a href="#s12"></a></td>
+    </tr>
+  </table>
+</div>
+
+<h2 id="s1">1. The Brief</h2>
+<div class="prob">
+Build a working computer-vision system that accepts body-camera video and produces a privacy-safe output by anonymizing every visible face. The footage may contain camera movement, low light, blur, occlusion, unusual viewpoints, long recordings and varying resolutions. Add an independent RetinaFace-based quality check that flags outputs where faces may remain visible. Assume processing is asynchronous and the same upload event may be received more than once. Submit runnable code with a brief explanation of your approach, evaluation method, known limitations and production considerations.
+</div>
+<p>I read that as four jobs, not a demo that blurs a still photo:</p>
+<ol>
+  <li>Hide every face I can find. A leftover face is a failed job.</li>
+  <li>Handle real body-cam tape: shake, night, smear, hands over faces, long files, 360p and 4K.</li>
+  <li>Check the finished video with RetinaFace, not with the model that painted the blur.</li>
+  <li>Treat processing as a job. The same upload twice must not encode twice.</li>
+</ol>
+
+<h2 id="s2">2. What I Built</h2>
+<p>
+Command: <span class="m">python -m face_anon process --input video.mp4 --output out.mp4</span>.
+It writes a redacted file and a JSON sidecar. Exit 0 means automated QC found no residual visible face in the checked frames. Exit 2 means a person should look. QC is sampled, not exhaustive.
+</p>
+<table class="toc">
+  <tr><th>Ask</th><th>What ships</th></tr>
+  <tr><td>Hide faces</td><td><span class="nw">YuNet</span> boxes, ByteTrack with a 14-frame coast, hybrid blur plus mosaic in an ellipse</td></tr>
+  <tr><td>Hard footage</td><td>Upsample small frames, night CLAHE on a copy only, adaptive pad, streaming encode</td></tr>
+  <tr><td>Independent QC</td><td>RetinaFace on the output. A mosaic silhouette is not a leak. A crop that still fails <span class="m">residual_visibility</span> (MAE ≥ 9 and Laplacian ≥ 22) is a residual visible face.</td></tr>
+  <tr><td>Duplicate events</td><td>SQLite job keyed by upload id and config hash, plus a cheap file fingerprint</td></tr>
+  <tr><td>Scale</td><td><span class="nw">YuNet</span> on the live path (about 11 ms). RetinaFace only as auditor. GPU when present, CPU if not.</td></tr>
+</table>
+
+<div class="part"></div>
+<h2 id="s3">3. Architecture</h2>
+<p>
+Three lanes. The job store sits in front so a webhook can fire twice. The live path paints blur. The audit path looks at the finished file with a different model.
+</p>
+
+<table class="flow">
+  <tr>
+    <td class="lab">Jobs</td>
+    <td>
+      <table class="arrowflow">
+        <tr>
+          <td class="box"><b>1. Upload</b>Same event can arrive twice</td>
+          <td class="arr"><span></span></td>
+          <td class="box"><b>2. Lock + id</b>upload_id + config hash, or file fingerprint</td>
+          <td class="arr"><span></span></td>
+          <td class="box"><b>3. Queue</b>New job, or reuse the old one</td>
+          <td class="arr"><span></span></td>
+          <td class="box"><b>4. Worker</b>One encode. Never two.</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="lab">Live path</td>
+    <td>
+      <table class="arrowflow">
+        <tr>
+          <td class="box"><b>1. Read frame</b>Stream. Do not load the file.</td>
+          <td class="arr"><span></span></td>
+          <td class="box"><b>2. Detect</b>YuNet at 640. Filter low-confidence / geometrically invalid boxes.</td>
+          <td class="arr"><span></span></td>
+          <td class="box"><b>3. Track</b>ByteTrack, privacy thresholds 0.28 / 0.18. Coast 14.</td>
+          <td class="arr"><span></span></td>
+          <td class="box"><b>4. Redact</b>Adaptive pad. Blur + mosaic. Write H.264.</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="lab">Audit</td>
+    <td>
+      <table class="arrowflow">
+        <tr>
+          <td class="box"><b>1. Sample output</b>0.2 s grid + risk frames on GPU. Sparse on CPU.</td>
+          <td class="arr"><span></span></td>
+          <td class="box"><b>2. RetinaFace</b>Different model from <span class="nw">YuNet</span></td>
+          <td class="arr"><span></span></td>
+          <td class="box"><b>3. Residual test</b>MAE + Laplacian. Mosaic is not a leak.</td>
+          <td class="arr"><span></span></td>
+          <td class="box"><b>4. Verdict</b>pass, or needs_review (exit 2)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<table class="two">
+  <tr>
+    <td class="part1">
+      <b>Live path stays cheap</b>
+      <span class="nw">YuNet</span> is about 11 ms on CPU. I can run it on every frame while people are in view. After 36 empty frames I detect every 4th frame.
+    </td>
+    <td class="part2">
+      <b>Audit stays independent</b>
+      RetinaFace never paints the blur. GPU QC: 0.2 s grid (every 6th frame at 30 FPS) plus track-loss, dark and motion frames. On this clip: 4,440 / 9,000. CPU: 1.5 s / 120.
+    </td>
+  </tr>
+</table>
+<table class="two">
+  <tr>
+    <td class="desk">
+      <b>Design principles</b>
+      1. Recall over precision. A missed face is worse than extra blur.<br/>
+      2. Temporal continuity. Tracking bridges short detector misses.<br/>
+      3. Model diversity. YuNet anonymizes. RetinaFace audits.
+    </td>
+    <td class="part1">
+      <b>Fail closed</b>
+      4. Review-gated output. Automated uncertainty never becomes automatic publication.<br/>
+      5. <span class="m">needs_review</span> is safer than publishing an uncertain video. Exit 2, not a silent pass.
+    </td>
+  </tr>
+</table>
+
+<div class="keep">
+<h2 id="s4">4. How It Works</h2>
+<table class="steps">
+  <tr>
+    <td><b>Detect</b>Long side to 640. <span class="nw">YuNet</span>, score ≥ 0.18. Reject boxes that fail landmark-geometry sanity (or score &lt; 0.75 on large boxes).</td>
+    <td><b>Track</b>ByteTrack privacy thresholds 0.28 / 0.18. Coast 14 frames after a miss. Cannot start a track the detector never fired.</td>
+    <td><b>Blur</b>Adaptive pad. Gaussian plus 10×10 mosaic in an ellipse on the eyes.</td>
+    <td><b>Check</b>RetinaFace on the output. Flag only a residual visible face (MAE ≥ 9 and Laplacian ≥ 22).</td>
+  </tr>
+</table>
+<p>
+I do not reject a box because it is large. Size is never a reject reason. Pad shrinks as the face fills the frame: far heads 42%, full-frame close-up 8%. Audio is copied. Metadata is stripped. This hides faces, not people.
+</p>
+</div>
+
+<div class="part"></div>
+<h2 id="s5">5. Problems I Hit, and How I Fixed Them</h2>
+<p>These are the issues that actually changed the code. I include them because the first version was wrong in ways a paper would not warn you about.</p>
+<table class="three">
+  <tr><th>What went wrong</th><th>Why</th><th>What I did</th></tr>
+  <tr>
+    <td>Ovals covered the whole room</td>
+    <td><span class="nw">YuNet</span> sometimes returns a torso or wall. A flat 42% pad then grew that box by about 1.8×.</td>
+    <td>Keep a large box only if the five landmarks pass the eyes-nose-mouth geometry check, or the score is ≥ 0.75. Shrink pad on close-ups.</td>
+  </tr>
+  <tr>
+    <td>A person on the lens was dropped</td>
+    <td>I had a rule: drop any box wider than 38% of the frame. That person <i>is</i> the frame.</td>
+    <td>Size is never a reject reason. Geometry and score are.</td>
+  </tr>
+  <tr>
+    <td>Far hallway heads leaked</td>
+    <td>8 to 12 px on 360p is almost no signal if you only shrink the frame.</td>
+    <td>Upsample so the long side is 640. Coast the track. Let QC flag what is still visible.</td>
+  </tr>
+  <tr>
+    <td>Stock ByteTrack lost tiny faces</td>
+    <td>It starts a track only at score 0.50. Tiny faces rarely get there, so they never get a coast.</td>
+    <td>ByteTrack privacy thresholds: start 0.28, keep 0.18. Misses fell from 104 to 37.</td>
+  </tr>
+  <tr>
+    <td>GPU sat idle while QC was slow</td>
+    <td>RetinaFace was 159 ms on CPU. I sampled 120 frames and hoped.</td>
+    <td>Run QC on CUDA (3.9 ms). Check every 0.2 s. Fall back to the sparse sample if there is no GPU.</td>
+  </tr>
+  <tr>
+    <td>960 px and tiles looked better on paper</td>
+    <td>They found a few more faces and a lot of walls. AP went down. Risk-gated tiles fired on 99.6% of airport frames.</td>
+    <td>Keep 640 on the live path. Use 960 only on a targeted retry.</td>
+  </tr>
+  <tr>
+    <td>Same upload encoded twice</td>
+    <td>A webhook can fire twice. Hashing a 64 GB file first would stall the disk.</td>
+    <td>Key = (upload_id, config_hash). Fallback = size + 1 MB from head, mid, tail. File lock around insert.</td>
+  </tr>
+  <tr>
+    <td>onnxruntime-gpu failed to start</td>
+    <td>1.27 wanted CUDA 13. The box has driver 550 (CUDA 12).</td>
+    <td>Pin 1.23.2 and preload the pip NVIDIA libraries.</td>
+  </tr>
+</table>
+
+<div class="part"></div>
+<h2 id="s6">6. Evaluation and Results</h2>
+<div class="callout">
+<b>Evaluation methodology.</b> Large-scale scores use RetinaFace detections on the <i>input</i> as proxy face labels (score ≥ 0.45, box ≥ 8 px, IoU match 0.20). These are not human boxes. They are only for comparing detectors and trackers on the same tape. I separately measure end-to-end output coverage and residual-face QC on the finished file. The hard subset is faces under 16 px, where misses concentrate. Latency is after warm-up, batch size 1, on NVIDIA L40S or CPU. Detector-only milliseconds exclude decode and encode. End-to-end throughput includes decode, detect, track, anonymize and encode. Current timings are single-run wall clock, not p50/p95/p99.
+</div>
+<table class="three">
+  <tr><th>Level</th><th>What I measure</th><th>What it is not</th></tr>
+  <tr><td>Detector</td><td>Precision, recall, tiny-face recall, AP vs proxy boxes</td><td>Not human recall. Not a privacy guarantee.</td></tr>
+  <tr><td>Tracking</td><td>Tracked recall after coasting. Miss count vs the same proxy set.</td><td>Not identity tracking. Coast can paint extra ovals.</td></tr>
+  <tr><td>End-to-end privacy</td><td>Anonymization coverage, residual-face rate, QC leak count, % jobs that need review</td><td>QC is a sample. A pass is not “no face exists.”</td></tr>
+</table>
+<p>
+<b>Anonymization coverage</b> = fraction of input proxy faces with no overlapping residual visible face on the output (IoU ≥ 0.20). In code: <span class="m">covered_gt_faces / input_faces_proxy</span> in <span class="m">eval_metrics.privacy_eval</span>. On the 5-minute hall clip that is 1,054 / 1,058 = <b>0.996</b>: four input proxy faces had a matching residual. <b>Residual-face rate</b> = 9 / 1,058 = 0.0085. These are not 1 − anonymization coverage. 1 − 0.996 = 4 / 1,058 unmatched proxy faces. Residual-face rate counts every residual visible face on the output (9), including boxes that do not IoU-match a proxy label. <b>QC flags</b> = residual visible faces on the sampled output frames (MAE ≥ 9 and Laplacian ≥ 22). A mosaic silhouette is not a flag.
+</p>
+<p class="cite">
+Two clips only. Airport hall: first five minutes of
+<a href="https://youtu.be/JhRufABvrC4">https://youtu.be/JhRufABvrC4</a>
+(480×360, 9,000 frames). Ablation uses a longer cut of that same file. Studio: Intel IoT <i>head-pose-face-detection-female</i>.
+</p>
+<table class="three">
+  <tr><th>Clip</th><th>Speed</th><th>Privacy (proxy)</th></tr>
+  <tr><td>Airport hall, 5 min</td><td><b>41.5 FPS</b> (1.38×). GPU QC: 20.9 s on 4,440 of 9,000 frames (0.2 s grid + risk extras).</td><td>Anonymization coverage <b>0.996</b> (1,054 / 1,058). Residual visible faces: 9 (rate 0.0085). QC flags 28. needs_review.</td></tr>
+  <tr><td>Studio close-up</td><td>31.2 FPS</td><td>18 RetinaFace hits on the mosaic, 0 residual visible faces. Pass.</td></tr>
+</table>
+<p>
+I also looked at eight stills by eye (close, profile, mid-range, far, crowd). Every close and mid-range face I marked was either detected on that frame or carried by the tracker from a neighbour. The misses I could confirm were far heads under 16 px, which matches the proxy ablation. I did not box the full five minutes. That is still the main evaluation gap.
+</p>
+<p>
+The 28 QC flags are tiny far heads, not a crash. The job stops at review instead of publishing. Uploading the same file twice reused the job and did not encode again.
+</p>
+<table class="shots fill">
+  <tr>
+    <td>
+      <img src="figures/airport5_022s.jpg" alt="Airport hall at 22 seconds, input and output" />
+      <div class="cap">Figure 1. Airport hall, t = 22 s. Mid-range faces are covered.</div>
+    </td>
+    <td>
+      <img src="figures/airport5_120s.jpg" alt="Airport hall at 120 seconds, input and output" />
+      <div class="cap">Figure 2. Airport hall, t = 120 s. Profile close-up. The oval stays on the head.</div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="figures/airport5_180s.jpg" alt="Airport hall at 180 seconds, input and output" />
+      <div class="cap">Figure 3. Airport hall, t = 180 s. Dense group. Near faces are painted. Far queue heads are the leak class.</div>
+    </td>
+    <td>
+      <img src="figures/airport5_090s.jpg" alt="Airport hall at 90 seconds, input and output" />
+      <div class="cap">Figure 4. Airport hall, t = 90 s. Odd viewpoint: an arm fills the lens, a face sits behind it.</div>
+    </td>
+  </tr>
+</table>
+<table class="shots full fill">
+  <tr>
+    <td>
+      <img src="figures/studio_028s.jpg" alt="Studio close-up at 28 seconds, input and output" />
+      <div class="cap">Figure 5. Studio close-up. A full-frame face is kept. Size is never a reject reason.</div>
+    </td>
+  </tr>
+</table>
+<div class="part"></div>
+<h3>Failure cases (QC residuals)</h3>
+<p>
+Four of the 28 QC flags on the 5-minute hall clip. Near faces in the same frames are covered. The job exits <span class="m">needs_review</span> and does not auto-publish.
+</p>
+<table class="shots fill">
+  <tr>
+    <td>
+      <img src="figures/failure_tiny.jpg" alt="Failure: tiny shop-window head" />
+      <div class="cap">Figure 6. Tiny far head, t = 5 s, ~17 px in a shop window. YuNet misses it, so no track starts. QC still sees a residual visible face.</div>
+    </td>
+    <td>
+      <img src="figures/failure_t042.jpg" alt="Failure: face entering at the left edge" />
+      <div class="cap">Figure 7. Frame-edge entry, t = 42 s. A face is half off-screen. The live path does not paint it. The residual is obvious on the output.</div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="figures/failure_t008.jpg" alt="Failure: far yellow-vest head" />
+      <div class="cap">Figure 8. Far hallway head, t = 8 s. The yellow vest is a few pixels. Close faces in the same frame are covered. This is the 8–16 px leak class.</div>
+    </td>
+    <td>
+      <img src="figures/failure_t074.jpg" alt="Failure: far desk head" />
+      <div class="cap">Figure 9. Far desk head, t = 74 s. The live path sometimes paints a weak oval; QC still scores a residual and keeps the job in review.</div>
+    </td>
+  </tr>
+</table>
+
+<div class="part"></div>
+<h2 id="s7">7. Ablation</h2>
+<p>
+I implemented the heavier graph too: SCRFD-10G, 960 px, tiles, and stock ByteTrack. The model comparison used a longer cut of the same airport hall (not a new scene). Labels: RetinaFace on every 15th input frame. 2,404 frames, 3,690 faces.
+</p>
+
+<h3>7.1 Latency</h3>
+<table class="three">
+  <tr><th>Model</th><th>CPU</th><th>GPU</th><th>Why it matters</th></tr>
+  <tr><td><span class="nw">YuNet</span> 640</td><td>10.8 ms</td><td>CPU only</td><td>Cheap enough for every frame</td></tr>
+  <tr><td>SCRFD-10G 640</td><td>132 ms</td><td>3.6 ms (10.6 in my loop)</td><td>Fine on GPU, too slow on CPU. Loop time includes letterbox and NMS.</td></tr>
+  <tr><td><span class="nw">YuNet</span> / SCRFD tiles</td><td>160 ms</td><td>27 ms</td><td>3× to 15× cost</td></tr>
+  <tr><td>RetinaFace (QC)</td><td>159 ms</td><td><b>3.9 ms (41×)</b></td><td>This is the GPU win. Dense audit becomes possible.</td></tr>
+</table>
+<p class="note">
+After warm-up, batch 1, NVIDIA L40S / CPU. Detector-only numbers exclude video decode and encode. End-to-end FPS includes both. I do not have p50/p95 yet. Production benchmarking should add them. SCRFD’s 3.6 ms kernel vs 10.6 ms in-loop gap is preprocess and postprocess, not the GPU kernel lying.
+</p>
+
+<h3>7.2 Detector at threshold 0.28</h3>
+<table class="three">
+  <tr><th>Config</th><th>Recall</th><th>Precision</th><th>F1</th><th>Missed</th><th>Tiny &lt; 16 px</th><th>AP</th></tr>
+  <tr><td><b><span class="nw">YuNet</span> 640</b></td><td><b>0.969</b></td><td>0.493</td><td>0.653</td><td>113</td><td><b>0.979</b></td><td><b>0.947</b></td></tr>
+  <tr><td><span class="nw">YuNet</span> 960</td><td>0.975</td><td>0.436</td><td>0.602</td><td>91</td><td>0.983</td><td>0.936</td></tr>
+  <tr><td><span class="nw">YuNet</span> tiles</td><td>0.988</td><td>0.292</td><td>0.451</td><td>44</td><td>0.990</td><td>0.923</td></tr>
+  <tr><td>SCRFD 640 GPU</td><td>0.960</td><td><b>0.566</b></td><td><b>0.712</b></td><td>148</td><td>0.937</td><td>0.939</td></tr>
+  <tr><td>SCRFD tiles</td><td>0.977</td><td>0.448</td><td>0.614</td><td>86</td><td>0.960</td><td>0.933</td></tr>
+</table>
+<p>
+For this privacy job, recall is the primary objective: a false negative exposes a face. False positives mainly add extra blur, so precision is a constraint on usability, not the thing I maximise. F1 is shown as a conventional summary. I did not pick the operating point to maximise F1. <span class="nw">YuNet</span> has better tiny-face recall. SCRFD paints fewer junk boxes. 960 and tiles buy recall and lose AP. On 931 faces under 16 px, <span class="nw">YuNet</span> misses 20 and SCRFD misses 59. That is the leak class, so <span class="nw">YuNet</span> stays the default.
+</p>
+
+<h3>7.3 Tracker, every frame of the 20-minute file</h3>
+<p>
+ByteTrack with privacy-oriented thresholds is not a published ByteTrack variant. In my stock ByteTrack configuration, a new track required a 0.50 detection score. Tiny hallway heads rarely get there, so they never get a coast. I start tracks at 0.28 and keep them at 0.18 so a weak detection can hold a mask. High recall is the point: starting from a weak box is better than leaving a face unmasked. ByteTrack cannot recover a face the detector never fired on. It only coasts a box that existed at least once. That is why an 8–12 px miss stays a miss until QC flags it.
+</p>
+<table class="three">
+  <tr><th>Setup</th><th>Recall</th><th>Missed</th><th>Tiny recall</th></tr>
+  <tr><td><span class="nw">YuNet</span>, no tracker</td><td>0.969</td><td>113</td><td>0.979</td></tr>
+  <tr><td><span class="nw">YuNet</span> + IoU coast</td><td>0.987</td><td>48</td><td>0.990</td></tr>
+  <tr><td><span class="nw">YuNet</span> + ByteTrack (stock, start 0.50)</td><td>0.972</td><td>104</td><td>0.954</td></tr>
+  <tr><td><b><span class="nw">YuNet</span> + ByteTrack (privacy thresholds 0.28 / 0.18)</b></td><td><b>0.990</b></td><td><b>37</b></td><td><b>0.993</b></td></tr>
+  <tr><td>SCRFD + ByteTrack (privacy thresholds)</td><td>0.981</td><td>69</td><td>0.964</td></tr>
+</table>
+<p>Association costs under 0.2 ms. The only trade is extra paint versus fewer misses. For this brief I take the extra paint.</p>
+
+<h3>7.4 End-to-end, first 5 minutes</h3>
+<table class="three">
+  <tr><th></th><th><span class="nw">YuNet</span> CPU (default)</th><th>SCRFD GPU</th></tr>
+  <tr><td>Throughput</td><td>41.5 FPS (1.38×)</td><td>57.4 FPS (1.91×)</td></tr>
+  <tr><td>Detect, in the loop</td><td>14.1 ms</td><td>10.6 ms</td></tr>
+  <tr><td>QC flags (residual visible faces)</td><td>28 on 4,440 frames</td><td>28 on 4,120 frames</td></tr>
+  <tr><td>Residual visible faces / residual-face rate</td><td>9 / 0.0085</td><td>5 / 0.0047</td></tr>
+  <tr><td>Anonymization coverage on 1,058 proxy faces</td><td>0.996 (1,054 / 1,058)</td><td>0.997 (1,055 / 1,058)</td></tr>
+</table>
+<div class="callout ok">
+<b>What I ship.</b> Default: <span class="nw">YuNet</span> 640 + ByteTrack with privacy-oriented thresholds + GPU QC when a GPU is there. SCRFD is one config file if throughput matters more. Do not run 960 or tiles on every frame.
+</div>
+
+<div class="part"></div>
+<h2 id="s8">8. How to Read the Code</h2>
+<p>
+Start at the command, then the loop, then the pieces the loop calls. Do not start in the detectors.
+</p>
+<table class="steps">
+  <tr>
+    <td><b>1. cli.py</b>process, submit, worker, status, eval</td>
+    <td><b>2. pipeline.py</b>Read, detect, track, blur, write, QC</td>
+    <td><b>3. factory.py</b>Which detector and tracker to build</td>
+    <td><b>4. The rest</b>One job each. See the table.</td>
+  </tr>
+</table>
+<table class="three">
+  <tr><th>File</th><th>What is in it</th></tr>
+  <tr><td class="m">cli.py</td><td>CLI: process, submit, worker, status, eval.</td></tr>
+  <tr><td class="m">pipeline.py</td><td>Main video loop: detect, track, blur, write, QC, optional retry.</td></tr>
+  <tr><td class="m">preprocess.py</td><td>Resize to 640, dark-frame CLAHE.</td></tr>
+  <tr><td class="m">detect_yunet.py</td><td>Default live finder. OpenCV, CPU.</td></tr>
+  <tr><td class="m">detect_scrfd.py</td><td>Optional live finder. InsightFace det_10g.</td></tr>
+  <tr><td class="m">detect_retinaface.py</td><td>Auditor only. Never paints blur.</td></tr>
+  <tr><td class="m">track.py</td><td>IoU coast and ByteTrack with privacy-oriented thresholds.</td></tr>
+  <tr><td class="m">anonymize.py</td><td>Gaussian + mosaic inside a rotated ellipse.</td></tr>
+  <tr><td class="m">video_io.py</td><td>Decode, NVENC/x264, copy audio, strip metadata.</td></tr>
+  <tr><td class="m">qc.py</td><td>Sampled residual-visible-face test.</td></tr>
+  <tr><td class="m">jobs.py</td><td>Idempotent queue: upload id, config hash, file lock.</td></tr>
+  <tr><td class="m">factory.py</td><td>Build detector, tracker, and QC from YAML.</td></tr>
+</table>
+<p class="note">Knobs live in <span class="m">configs/default.yaml</span>. Change finding or blur? Bump <span class="m">pipeline_version</span> so old jobs are not treated as the same work. Extra configs: <span class="m">cpu_yunet.yaml</span>, <span class="m">gpu_scrfd.yaml</span>.</p>
+
+<h2 id="s9">9. What Is Still Weak</h2>
+<table class="three">
+  <tr><th>Limit</th><th>What I would do next</th></tr>
+  <tr><td>Far 8 to 12 px heads. 37 of 3,690 still missed.</td><td>A person or head detector every few frames. Bigger face nets and tiles already lost AP.</td></tr>
+  <tr><td>QC is still a sample (0.2 s grid + extras on GPU, 1.5 s / 120 on CPU).</td><td>TensorRT, every-frame QC on GPU. Show a reviewer only the leftover crop.</td></tr>
+  <tr><td>A face hidden longer than about 0.5 s drops.</td><td>Track the body, not only the face.</td></tr>
+  <tr><td>ByteTrack with privacy thresholds paints about two ovals per real face in this hall.</td><td>Acceptable here. A head detector would drop junk boxes.</td></tr>
+  <tr><td>Mirrors, posters, phone screens.</td><td>Those are faces. I usually want them blurred.</td></tr>
+  <tr><td>Audio, tattoos, nameplates, gait.</td><td>Out of scope. This is face redaction.</td></tr>
+  <tr><td>Labels are RetinaFace, not a person. I only spot-checked eight stills.</td><td>A boxed human set on the hard frames (close, 8–16 px, profile, blur). The scripts already take a box list.</td></tr>
+</table>
+<div class="callout">
+<b>Production.</b> One GPU can audit many <span class="nw">YuNet</span> workers (3.9 ms per QC frame). Swap SQLite for Redis or SQS and keep the same keys. Chunk long files into 2 to 5 minutes. Do not auto-publish <span class="m">needs_review</span>. Do not GAN-inpaint a fake face. Store the config hash, output hash and QC JSON next to the file. Never log raw frames.
+</div>
+
+<h2 id="s10">10. Next Steps</h2>
+<p>
+The default stack is good enough to ship as a review-gated worker. Priority order: privacy (recall) → output quality (precision) → cost and latency. The leftover work is not “add tiles everywhere.”
+</p>
+<table class="two next">
+  <tr>
+    <td class="part2">
+      <b>1. Raise recall (privacy)</b>
+      The 37 misses on the long cut are 8 to 12 px heads, not a detector crash. A person detector plus a face crop on that region beats full-frame 960 and tiles, which already lost AP. Keep painting while a body is still in view, even if the face is hidden for more than 0.5 s. Use the existing retry path on QC leak frames only: 960 or a small tile there, never on every frame. Box a human set on those hard frames so the recall number is not only a RetinaFace proxy.
+    </td>
+    <td class="part1">
+      <b>2. Raise precision (output quality)</b>
+      ByteTrack with privacy-oriented thresholds paints about two ovals per real face in this hall. A cheap person or head box every few frames would drop torso and wall hits before they get a coast. Tighten the landmark gate on large, low-score boxes. Run SCRFD only as a second opinion on tracks that YuNet is unsure about.
+    </td>
+  </tr>
+</table>
+<table class="two next">
+  <tr>
+    <td class="desk">
+      <b>3. Make it faster (cost / latency)</b>
+      End-to-end is CPU-bound. YuNet is 11 ms. Blur and the Python frame loop dominate, and the GPU sits idle during encode. Move the ellipse blur onto CUDA or a small compiled kernel. Batch RetinaFace QC and compile it with TensorRT so the auditor can look at every frame. Split a long file into 2 to 5 minute chunks. Do not upsample empty hallway frames. Add p50/p95/p99 on the same bench.
+    </td>
+    <td class="phone">
+      <b>What I would not do</b>
+      I would not put SCRFD, 960, or tiles on the live path by default. I would not GAN-inpaint a fake face. I would not auto-publish <span class="m">needs_review</span>. Those choices already showed up as lower AP, extra cost, or a privacy risk.
+    </td>
+  </tr>
+</table>
+<div class="callout">
+<b>Order I would take.</b> First: person detector + leak-only 960 retry (recall). Second: person/head gate on junk ovals (precision). Third: GPU blur + TensorRT QC (speed, and every-frame audit).
+</div>
+
+<h2 id="s11">11. How to Run It</h2>
+<pre>pip install -e .
+pip install onnxruntime-gpu==1.23.2     # optional
+python -m face_anon download-models --sample
+
+PYTHONPATH=src python -m face_anon process \
+  --input data/samples/airport_5min.mp4 \
+  --output outputs/airport_5min_anon.mp4
+
+PYTHONPATH=src python -m face_anon submit --upload-id evt-001 \
+  --input data/samples/airport_5min.mp4
+PYTHONPATH=src python -m face_anon worker --once
+
+PYTHONPATH=src python -m pytest -q
+PYTHONPATH=src python scripts/run_ablation.py --video data/samples/airport_full.mp4
+</pre>
+<h2 id="s12">12. Sources</h2>
+<p class="cite">
+[1] Airport hall body-camera footage. Axon Body 2 recording in a public terminal (on-screen overlay: POLICE ON SCENE). Used as the 5-minute end-to-end clip and, in a longer cut of the same file, as the ablation set.
+<a href="https://youtu.be/JhRufABvrC4">https://youtu.be/JhRufABvrC4</a>
+</p>
+<p class="cite">
+[2] Studio close-up. Intel IoT Devkit sample video <i>head-pose-face-detection-female</i>.
+<a href="https://github.com/intel-iot-devkit/sample-videos">https://github.com/intel-iot-devkit/sample-videos</a>
+</p>
+<p class="cite">
+[3] YuNet. Wu, Chen, and Ye. “YuNet: A Tiny Millisecond-level Face Detector.” OpenCV Zoo.
+</p>
+<p class="cite">
+[4] SCRFD. Guo et al. “Sample and Computation Redistribution for Efficient Face Detection.” InsightFace <span class="m">det_10g</span>.
+</p>
+<p class="cite">
+[5] RetinaFace. Deng et al. “RetinaFace: Single-Shot Multi-Level Face Localisation in the Wild.” CVPR 2020.
+</p>
+<p class="cite">
+[6] ByteTrack. Zhang et al. “ByteTrack: Multi-Object Tracking by Associating Every Detection Box.” ECCV 2022. Privacy-oriented thresholds here are mine, not a stock preset.
+</p>
+<p class="note">
+Prepared for Pronto by Shivam. Pipeline 1.2.0. Demo: <span class="m">outputs/full/airport_5min_default.mp4</span>. Ablation: <span class="m">outputs/demo/ablation_full.json</span>. Coverage recompute: <span class="m">outputs/demo/privacy_eval_yunet_600.json</span>.
+</p>
+
+</body>
+</html>

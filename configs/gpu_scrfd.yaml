@@ -1,0 +1,66 @@
+# Ablation variant: SCRFD-10G-KPS 640 on CUDA + privacy-tuned ByteTrack + dense GPU QC.
+# Falls back to CPU providers if CUDA is missing (slow: ~130 ms/frame).
+pipeline_version: "1.2.0"
+device: auto
+
+detector:
+  name: scrfd
+  score_threshold: 0.18
+  nms_threshold: 0.40
+  input_long_side: 640
+  extra_long_side: 960
+  extra_every: 0
+  strong_every: 0
+  min_face_px: 6
+
+preprocess:
+  clahe_when_mean_below: 72
+  clahe_clip: 2.0
+  clahe_grid: 8
+
+tracker:
+  name: bytetrack
+  high_thresh: 0.28
+  low_thresh: 0.18
+  iou_match: 0.22
+  center_match_frac: 0.35
+  max_age: 14
+  min_hits: 1
+  smooth: 0.55
+
+anonymize:
+  method: hybrid
+  pad: 0.42
+  pixel_blocks: 10
+  shape: ellipse
+
+adaptive:
+  empty_streak_before_skip: 36
+  empty_detect_every: 4
+
+video:
+  keep_audio: true
+  encoder: auto
+  crf: 20
+  preset: p1
+
+qc:
+  enabled: true
+  score_threshold: 0.50
+  nms_threshold: 0.40
+  input_long_side: 640
+  sample_interval_sec: 0.2
+  max_frames: 20000
+  cpu_sample_interval_sec: 1.5
+  cpu_max_frames: 120
+  oversample_track_loss: true
+  fail_fast: false
+  retry_on_fail: false
+  retry_score_threshold: 0.22
+  retry_input_long_side: 960
+  retry_detect_every: 1
+  retry_strong_every: 0
+
+jobs:
+  db_path: outputs/jobs.sqlite
+  lock_dir: outputs/locks
