@@ -1,6 +1,6 @@
 # Body-camera face anonymizer
 
-Assignment submission for Pronto. Streaming redaction for body-worn camera video. Faces the live detector finds are blurred, then an independent RetinaFace pass flags residual visible faces. Duplicate upload events reuse the first job.
+Streaming redaction for body-worn camera video. Faces the live detector finds are blurred, then an independent RetinaFace pass flags residual visible faces. Duplicate upload events reuse the first job.
 
 Write-up: [`docs/Shivam_Pronto_Bodycam_Face_Anonymizer_Report.pdf`](docs/Shivam_Pronto_Bodycam_Face_Anonymizer_Report.pdf)
 
